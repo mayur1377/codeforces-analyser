@@ -1,0 +1,17 @@
+/* globals.css */
+
+/* Add transition for background color and text color */
+html, body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .light-theme {
+    --bg-color: white;
+    --text-color: #000;
+  }
+  
+  .dark-theme {
+    --bg-color: #333;
+    --text-color: #fff;
+  }
+  
