@@ -2,18 +2,14 @@
 
 import * as React from "react"
 import { useTheme } from "next-themes"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import { IoSunnyOutline } from "react-icons/io5"  // Sun icon
+import { LuMoonStar } from "react-icons/lu"     // Moon icon
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme()
 
-  const handleChange = (checked: boolean) => {
-    if (checked) {
-      setTheme("dark")
-    } else {
-      setTheme("light")
-    }
+  const handleChange = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
   }
 
   React.useEffect(() => {
@@ -27,15 +23,17 @@ export function ModeToggle() {
   }, [theme])
 
   return (
-    <div className="flex items-center space-x-4">
-      <Label htmlFor="theme-toggle" className="text-lg">
-        Theme
-      </Label>
-      <Switch
-        id="theme-toggle"
-        checked={theme === "dark"}
-        onCheckedChange={handleChange}
-      />
+    <div className="fixed bottom-4 left-4 flex items-center space-x-4">
+      <button 
+        onClick={handleChange} 
+        className="text-lg focus:outline-none"
+      >
+        {theme === "dark" ? (
+          <LuMoonStar />  // Moon icon for light theme
+        ) : (
+          <IoSunnyOutline className="text-black" style={{ color: '#1a202c' }} />
+        )}
+      </button>
     </div>
   )
 }

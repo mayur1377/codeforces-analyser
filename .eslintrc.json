@@ -1,3 +1,21 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-console": "off", // Disable the no-console rule globally
+    "react/react-in-jsx-scope": "off" // Disable the rule for React in JSX scope
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-unused-vars": "off" // Disable the no-unused-vars rule for TypeScript files
+      }
+    },
+    {
+      "files": ["pages/**/*.js"],
+      "rules": {
+        "no-console": "off" // Disable the no-console rule for files in the pages directory
+      }
+    }
+  ]
 }

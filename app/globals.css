@@ -4,10 +4,12 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
-
+  transition: background-color 3s ease-in-out;
 }
 
+.theme-transition {
+  transition: background-color 5s ease, color 5s ease;
+}
 
 
 @layer utilities {
@@ -43,6 +45,9 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --bg-color: white;
+    --box-color: #dddddd;
+
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -69,6 +74,8 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --bg-color: #1a202c;
+    --box-color: #333843;
   }
 }
 
@@ -79,4 +86,38 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Hide scrollbars while keeping scrolling functional */
+.hidden-scrollbar {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For IE and Edge */
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.wave-animation {
+  display: inline-block;
+  animation: wave 1s infinite;
 }

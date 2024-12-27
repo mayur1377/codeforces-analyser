@@ -1,0 +1,15 @@
+
+:root {
+  --bg-color: #ffffff; /* Default background color */
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Default box shadow */
+}
+
+.dark-theme {
+  --bg-color: #1a202c; /* Dark mode background color */
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Dark mode box shadow */
+}
+
+.light-theme {
+  --bg-color: #ffffff; /* Light mode background color */
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light mode box shadow */
+}
