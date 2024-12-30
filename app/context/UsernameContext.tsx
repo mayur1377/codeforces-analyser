@@ -158,9 +158,35 @@ export const UsernameProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     
     const fetchUserData = async () => {
-      if (!username) return; // Do nothing if no username is set
+      if (!username) return;
+      
+      // Clear previous data and set loading immediately when username changes
+      setUserphoto("");
+      setFirstName("");
+      setContribution(0);
+      setFriendOfCount(0);
+      setMaxRank("");
+      setMaxRating(0);
+      setRating(0);
+      setRank("");
+      setRegistrationTime("");
+      setTotalSubmissions(0);
+      setProblemsPerDayMap(new Map());
+      setContestsDivMap(new Map());
+      setCategorizedContests({
+        "Div. 1": [],
+        "Div. 2": [],
+        "Div. 3": [],
+        "Div. 4": [],
+        "Div. 1 + Div. 2": [],
+        "Other Contests": [],
+      });
+      
       try {
+        // Start loading
         setIsLoading(true);
+        
+        // Fetch data
         const response = await axios.get(
           `https://codeforces.com/api/user.info?handles=${username}`
         );
@@ -303,9 +329,9 @@ export const UsernameProvider = ({ children }: { children: ReactNode }) => {
         // console.log("tempContestsDivMap", tempContestsDivMap);
       }
       catch (error) {
-        // console.error("Failed to fetch user data");
-      }
-       finally {
+        // Handle error
+        console.error("Failed to fetch user data");
+      } finally {
         setIsLoading(false);
       }
     };

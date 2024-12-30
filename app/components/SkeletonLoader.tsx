@@ -13,6 +13,8 @@ const SkeletonLoader = () => {
         </div>
       </div>
       <Skeleton className="w-full h-[100px] mt-4" />
+      <Skeleton className="w-full h-[400px] mt-4" />
+
     </>
   );
 };
