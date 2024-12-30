@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import {
@@ -39,10 +39,8 @@ const calculateLongestStreak = (dates: string[]) => {
 };
 
 const ProblemCalendar: React.FC = () => {
-  const { problemsPerDayMap, selectedYears, setSelectedYears, username } = useContext(UsernameContext);
-
+  const { problemsPerDayMap, selectedYears, setSelectedYears } = useContext(UsernameContext);
   const currentYear = new Date().getFullYear();
-  const yearsToDisplay = selectedYears.length > 0 ? selectedYears : [currentYear];
 
   const heatmapValues = useMemo(
     () =>
@@ -53,17 +51,9 @@ const ProblemCalendar: React.FC = () => {
     [problemsPerDayMap]
   );
 
-  const filteredValues = useMemo(
-    () =>
-      heatmapValues.filter(({ date }) =>
-        yearsToDisplay.includes(getYearFromDate(date))
-      ),
-    [heatmapValues, yearsToDisplay]
-  );
-
   const dataByYear = useMemo(
     () =>
-      filteredValues.reduce((acc, { date, count }) => {
+      heatmapValues.reduce((acc, { date, count }) => {
         const year = getYearFromDate(date);
         if (!acc[year]) {
           acc[year] = { submissions: 0, activeDays: 0, activeDates: [], data: [] };
@@ -76,7 +66,7 @@ const ProblemCalendar: React.FC = () => {
         acc[year].data.push({ date, count });
         return acc;
       }, {} as { [key: number]: { submissions: number; activeDays: number; activeDates: Date[]; data: { date: Date; count: number }[] } }),
-    [filteredValues]
+    [heatmapValues]
   );
 
   const years = useMemo(
@@ -87,22 +77,10 @@ const ProblemCalendar: React.FC = () => {
     [dataByYear]
   );
 
-  useEffect(() => {
-    if (
-      yearsToDisplay.every(year => !dataByYear[year]) &&
-      yearsToDisplay.length > 0
-    ) {
-      const newYears = [currentYear];
-      if (JSON.stringify(newYears) !== JSON.stringify(yearsToDisplay)) {
-        setSelectedYears(newYears);
-      }
-    }
-  }, [yearsToDisplay, dataByYear, setSelectedYears, currentYear]);
-
   return (
     <TooltipProvider>
       <div className="w-full">
-        {yearsToDisplay.map(year => {
+        {years.map(year => {
           const yearData = dataByYear[year]?.data || [];
           const totalSubmissions = dataByYear[year]?.submissions || 0;
           const totalActiveDays = dataByYear[year]?.activeDays || 0;
@@ -115,63 +93,43 @@ const ProblemCalendar: React.FC = () => {
           const endDate = new Date(`${year}-12-31`);
 
           return (
-            <div key={year} className="heatmap-container">
-              <h4
-                className="text-left text-gray-600 flex items-center"
-                style={{ fontSize: "12px", margin: "5px" }}
-              >
-                <span className="font-bold">{year}</span> - {totalSubmissions}{" "}
-                Submissions, {totalActiveDays} Days,{" "}
-                <AiOutlineFire className="inline-block" /> {longestStreak} Days
-              </h4>
-              <CalendarHeatmap
-                startDate={startDate}
-                endDate={endDate}
-                values={yearData}
-                classForValue={value => {
-                  if (!value || value.count === 0) {
-                    return "color-empty";
-                  }
-                  return `color-scale-${Math.min(value.count, 4)}`;
-                }}
-                showMonthLabels={false}
-                transformDayElement={(rect, value) => (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      {/* @ts-ignore */}
-                      <g>{rect}</g>
-                    </TooltipTrigger>
-                    {value && value.count > 0 && (
-                      <TooltipContent>
-                        <p>
-                          {value.count} submissions on{" "}
-                          {value.date.toLocaleString("default", {
-                            month: "short",
-                          })}{" "}
-                          {value.date.getDate()}, {value.date.getFullYear()}
-                        </p>
-                      </TooltipContent>
-                    )}
-                  </Tooltip>
-                )}
-              />
+            <div
+              key={year}
+              className="transition-[max-height] duration-500 ease-in-out"
+              style={{ 
+                maxHeight: selectedYears.includes(year) ? '200px' : '0',
+                overflow: 'hidden',
+                marginBottom: selectedYears.includes(year) ? '24px' : '0'
+              }}
+            >
+              <div className={`transition-opacity duration-500 ease-in-out ${
+                !selectedYears.includes(year) ? 'opacity-0' : 'opacity-100'
+              }`}>
+                <h4
+                  className="text-left text-gray-600 flex items-center"
+                  style={{ fontSize: "12px", margin: "5px" }}
+                >
+                  <span className="font-bold">{year}</span> - {totalSubmissions}{" "}
+                  Submissions, {totalActiveDays} Days,{" "}
+                  <AiOutlineFire className="inline-block" /> {longestStreak} Days
+                </h4>
+                <CalendarHeatmap
+                  startDate={startDate}
+                  endDate={endDate}
+                  values={yearData}
+                  classForValue={value => {
+                    if (!value || value.count === 0) {
+                      return "color-empty";
+                    }
+                    return `color-scale-${Math.min(value.count, 4)}`;
+                  }}
+                  showMonthLabels={false}
+                />
+              </div>
             </div>
           );
         })}
         <style>{`
-          .heatmap-container {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: auto;
-            min-width: 320px;
-            margin-bottom: 40px;
-          }
-
-          .react-calendar-heatmap {
-            width: 100%;
-            max-width: 100%;
-          }
-
           .react-calendar-heatmap .color-empty {
             fill: var(--box-color);
           }
