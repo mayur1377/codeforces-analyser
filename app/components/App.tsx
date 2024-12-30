@@ -62,31 +62,43 @@ const App = () => {
   return (
     <div className="flex">
       <div className="overflow-y-auto hidden-scrollbar">
-      <div className="w-11/12 max-w-3xl h-auto min-h-[700px] max-h-[80vh] rounded-2xl border border-gray-300 p-4 flex items-start fixed left-1/2 transform -translate-x-1/2 bg-[var(--bg-color)] shadow-[0px_10px_14px_rgba(0,0,0,0.1),0px_10px_20px_rgba(0,0,0,0.1)] overflow-y-auto hidden-scrollbar">
-        <div
-          id="app-container"
-          className="w-full p-4 flex flex-col rounded-[80px]"
-        >
-          {isLoading ? (
-            username !== "" ? (
-              <SkeletonLoader />
-            ) : (
-              <InitialScreen />
-            )
-          ) : username ? (
-            <>
-              <UserProfile />
-              <div>
-                <ProblemCalendar />
-                {showUserContestData && <UserContestData />}
-                {showContestData && <ContestData />}
-              </div>
-            </>
-          ) : (
-            <InitialScreen />
-          )}
+        <div className="w-11/12 max-w-3xl rounded-2xl border border-gray-300 p-4 flex items-start fixed left-1/2 transform -translate-x-1/2 bg-[var(--bg-color)] shadow-[0px_10px_14px_rgba(0,0,0,0.1),0px_10px_20px_rgba(0,0,0,0.1)] overflow-hidden">
+          <div
+            id="app-container"
+            className="w-full p-4 flex flex-col rounded-[80px]"
+          >
+            <div className="transition-[max-height] duration-500 ease-in-out overflow-y-auto hidden-scrollbar" style={{ maxHeight: '80vh' }}>
+              {isLoading ? (
+                username !== "" ? (
+                  <SkeletonLoader />
+                ) : (
+                  <InitialScreen />
+                )
+              ) : username ? (
+                <>
+                  <UserProfile />
+                  <div className="transition-all duration-500 ease-in-out">
+                    <ProblemCalendar />
+                    <div className="transition-[max-height] duration-500 ease-in-out" 
+                         style={{ maxHeight: showUserContestData ? '1000px' : '0', overflow: 'hidden' }}>
+                      <div className={`transition-opacity duration-500 ease-in-out ${!showUserContestData ? 'opacity-0' : 'opacity-100'}`}>
+                        <UserContestData />
+                      </div>
+                    </div>
+                    <div className="transition-[max-height] duration-500 ease-in-out" 
+                         style={{ maxHeight: showContestData ? '1000px' : '0', overflow: 'hidden' }}>
+                      <div className={`transition-opacity duration-500 ease-in-out ${!showContestData ? 'opacity-0' : 'opacity-100'}`}>
+                        <ContestData />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <InitialScreen />
+              )}
+            </div>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
