@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/ui/theme-provider"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 
 const geistSans = localFont({
@@ -40,6 +41,7 @@ export default function RootLayout({
         {children}
         </ThemeProvider>
         <Toaster />
+        <SpeedInsights />
       </body>
     </html>
   );
