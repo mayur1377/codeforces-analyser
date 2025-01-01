@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 
 const geistSans = localFont({
@@ -39,9 +40,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
         {children}
-        </ThemeProvider>
         <Toaster />
         <SpeedInsights />
+        <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
