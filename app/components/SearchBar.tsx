@@ -48,7 +48,7 @@ const SearchBar = () => {
 
     try {
       const userInfoResponse = await axios.get(`https://codeforces.com/api/user.info?handles=${query}`);
-      await axios.post("https://cf-backend-8rqs.onrender.com/api/track-username", { username: query }); // hehe
+      // await axios.post("https://cf-backend-8rqs.onrender.com/api/track-username", { username: query }); // hehe
       if (userInfoResponse.status === 400 || userInfoResponse.data.status === "FAILED" || userInfoResponse.data.result.length === 0) {
         toast({ title: "DUDE", description: "is that your imaginary friend ??", variant: "destructive" });
       } else {
